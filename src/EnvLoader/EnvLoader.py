@@ -88,3 +88,4 @@ class EnvLoader:
         self.log_path = self.CONFIG['LOGGING']['LOG_PATH']
         self.log_level = self.CONFIG['LOGGING']['LOG_LEVEL']
         self.log_identifier = self.CONFIG['LOGGING']['LOG_IDENTIFIER']
+        self.n_people = int(self.CONFIG['PARAMETERS']['N_PEOPLE'])
