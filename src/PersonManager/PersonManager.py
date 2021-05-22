@@ -119,7 +119,9 @@ class PersonManager:
         IMC = weight(kg) / height(m)
         """
         self.logger.log.info("Calc people imc")
-
+        self.__imc = [ (self.__weight[idx] / self.__height[idx]) for idx in range(0, len(self.__weight)) ]
+        for idx, imc in enumerate(self.__imc):
+            print(self.__name[idx], "(imc): ", imc)
 
     def calc_document(self):
         self.logger.log.info("Calc document")
