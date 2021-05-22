@@ -10,16 +10,13 @@ def orchestrator(config, logger):
 
     try:
         logger.log.info("App orchestrator execution\n")
-        logger.log.info("App orchestrator arguments {0} \n".format(config))
+        logger.log.info(f'App orchestrator arguments \'{config}\'')
 
         personManager = PersonManager(config = config, logger = logger)
 
         while True:
-            personManager.print_menu()
-            option = HelperClass.input_int(
-                message = "Insert option: ",
-                required_positive = True
-            )
+            personManager.print_options()
+            personManager.request_option()
 
     except Exception as err:
         logger.log_traceback(err)

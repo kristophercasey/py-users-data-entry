@@ -1,8 +1,8 @@
-
+from src.Helpers.Helpers import HelperClass
 
 
 class PersonManager:
-    menu_options = [
+    __menu_options = [
         "Exit",
         "Insert data",
         "Calc person weight",
@@ -18,22 +18,41 @@ class PersonManager:
 
     def __init__(self, config, logger):
         self.MIN_REQ_MENU_OPTIONS = [self.INSERT_DATA_OPT_POS, self.EXIT_OPT_POS]
+        # self.__name = []
+        # self.__age = []
+        # self.__dni = []
+        # self.__weight = []
+        # self.__height = []
+        # self.__address = []
+        # self.__sex = []
+        self.__imc = []
+        self.__idx = 0
+        self.__current_opt = None
+
+        self.__name = ['Sergio', 'Cris']
+        self.__age = [30, 29]
+        self.__dni = ["DNI 1", "DNI 2"]
+        self.__weight = [85.1, 70.0]
+        self.__height = [1.75, 1.7]
+        self.__address = ["adress 1", "adress 2"]
+        self.__sex = ['m', 'w']
+        self.__idx = 2
+
         self.config = config
         self.logger = logger
 
-        self.__name = []
-        self.__age = []
-        self.__dni = []
-        self.__weight = []
-        self.__height = []
-        self.__address = []
-        self.__sex = []
-        self.__imc = []
-        self.__age_status = None
-        self.__idx = 0
-
-    def print_menu(self):
-        for idx, opt in enumerate(self.menu_options):
-            is_print_for_filled_data = self.__idx > 0
-            if is_print_for_filled_data: print(f'{idx}) ', opt)
+    def print_options(self):
+        print("")
+        for idx, opt in enumerate(self.__menu_options):
+            if self.__is_filled_data(): print(f'{idx}) ', opt)
             elif idx in self.MIN_REQ_MENU_OPTIONS: print(f'{idx}) ', opt)
+
+    def request_option(self):
+        self.__current_opt = HelperClass.input_int(
+            message = "Insert option: ",
+            required_positive = True
+        )
+
+
+    def __is_filled_data(self):
+        return self.__idx > 0
