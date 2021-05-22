@@ -59,6 +59,25 @@ class PersonManager:
             print(f'Not valid menu option \'{self.__current_opt}\'')
             return
 
+        if self.__current_opt == 0:
+            self.logger.log.info("Exit program")
+            exit()
+        elif self.__current_opt == 1:
+            self.insert_data()
+        elif self.__current_opt == 2:
+            self.calc_imc()
+        elif self.__current_opt == 3:
+            self.calc_document()
+        elif self.__current_opt == 4:
+            self.calc_is_adult()
+        elif self.__current_opt == 5:
+            self.calc_categoric_sex_percent()
+        elif self.__current_opt == 6:
+            self.calc_categoric_weight_percent()
+        elif self.__current_opt == 7:
+            self.calc_categoric_age_percent()
+        elif self.__current_opt == 8:
+            self.get_variables()
 
     def __is_valid_option(self):
         is_correct_opt = self.__is_filled_data() and self.__current_opt < len(self.__menu_options)
@@ -67,6 +86,41 @@ class PersonManager:
         if not is_option_in_menu: return False
 
         return True
+
+    def insert_data(self):
+        print("Insert person data")
+        print(f'People to insert: {self.config.n_people} \n')
+
+
+        # self.__insert_sex()
+
+    def calc_imc(self):
+        """
+        IMC = weight(kg) / height(m)
+        """
+        self.logger.log.info("Calc people imc")
+
+
+    def calc_document(self):
+        self.logger.log.info("Calc document")
+
+    def calc_is_adult(self):
+
+        self.logger.log.info("Calc is adult {}")
+
+    def calc_categoric_sex_percent(self):
+        self.logger.log.info("Calc categoric sex percent")
+
+
+    def calc_categoric_weight_percent(self):
+        self.logger.log.info("Calc categoric weight percent")
+
+    def calc_categoric_age_percent(self):
+        self.logger.log.info("Calc categoric age percent")
+
+    def get_variables(self):
+        self.logger.log.info("Exit program")
+        return self.__name, self.__sex
 
     def __is_filled_data(self):
         return self.__idx > 0
