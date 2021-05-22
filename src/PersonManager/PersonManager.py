@@ -132,6 +132,10 @@ class PersonManager:
 
     def calc_categoric_sex_percent(self):
         self.logger.log.info("Calc categoric sex percent")
+        man_percentage = (sum([1 if sex == 'm' else 0 for sex in self.__sex]) / self.__idx) * 100
+        woman_percentage = (sum([1 if sex == 'w' else 0 for sex in self.__sex]) / self.__idx) * 100
+        print(f'Man percentage {man_percentage} %')
+        print(f'Woman percentage {woman_percentage} %')
 
     def calc_categoric_weight_percent(self):
         self.logger.log.info("Calc categoric weight percent")
