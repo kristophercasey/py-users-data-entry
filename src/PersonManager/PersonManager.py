@@ -2,18 +2,22 @@
 
 
 class PersonManager:
+    menu_options = [
+        "Exit",
+        "Insert data",
+        "Calc person weight",
+        "Calc document",
+        "Calc is adult",
+        "Calc sex percent",
+        "Calc weight percent",
+        "Calc age percent",
+        "Get data",
+    ]
+    EXIT_OPT_POS = 0
+    INSERT_DATA_OPT_POS = 1
+
     def __init__(self, config, logger):
-        self.menu_options = [
-            "1) Insert data",
-            "2) Calc person weight",
-            "3) Calc document",
-            "4) Calc is adult",
-            "5) Calc sex percent",
-            "6) Calc weight percent",
-            "7) Calc age percent",
-            "8) Get data",
-            "0) Exit",
-        ]
+        self.MIN_REQ_MENU_OPTIONS = [self.INSERT_DATA_OPT_POS, self.EXIT_OPT_POS]
         self.config = config
         self.logger = logger
 
@@ -29,4 +33,7 @@ class PersonManager:
         self.__idx = 0
 
     def print_menu(self):
-        for opt in self.menu_options: print(opt)
+        for idx, opt in enumerate(self.menu_options):
+            is_print_for_filled_data = self.__idx > 0
+            if is_print_for_filled_data: print(f'{idx}) ', opt)
+            elif idx in self.MIN_REQ_MENU_OPTIONS: print(f'{idx}) ', opt)
