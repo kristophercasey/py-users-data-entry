@@ -90,7 +90,27 @@ class PersonManager:
     def insert_data(self):
         print("Insert person data")
         print(f'People to insert: {self.config.n_people} \n')
+        self.__idx = 0
+        while self.__idx < self.config.n_people:
+            user_num = self.__idx + 1
+            self.__name.append(HelperClass.input_str(f'({user_num}) Insert name: '))
+            self.__age.append(HelperClass.input_int(message = f'({user_num}) Insert age: ', required_positive = True, allowed_zero = False))
+            self.__sex.append(HelperClass.input_str(message = f'({user_num}) Insert sex [man(m) | woman(w)]: ', options = ['m', 'w']))
+            # self.__dni.append(HelperClass.input_str(f'({user_num}) Insert dni: '))
+            self.__weight.append(HelperClass.input_float(message = f'({user_num}) Insert weight: ', required_positive = True, allowed_zero = False))
+            self.__height.append(HelperClass.input_float(message = f'({user_num}) Insert height: ', required_positive = True, allowed_zero = False))
+            # self.__address.append(HelperClass.input_str(f'({user_num}) Insert address: '))
+            self.__idx += 1
+            print("")
 
+        self.logger.log.info("Data saved correctly")
+        print(self.__name)
+        print(self.__age)
+        print(self.__dni)
+        print(self.__weight)
+        print(self.__height)
+        print(self.__address)
+        print(self.__sex)
 
         # self.__insert_sex()
 
@@ -105,12 +125,11 @@ class PersonManager:
         self.logger.log.info("Calc document")
 
     def calc_is_adult(self):
-
-        self.logger.log.info("Calc is adult {}")
+        age_status = []
+        self.logger.log.info(f'Calc is adult {age_status}')
 
     def calc_categoric_sex_percent(self):
         self.logger.log.info("Calc categoric sex percent")
-
 
     def calc_categoric_weight_percent(self):
         self.logger.log.info("Calc categoric weight percent")
