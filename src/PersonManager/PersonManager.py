@@ -127,7 +127,7 @@ class PersonManager:
         self.logger.log.info("Calc document")
 
     def calc_is_adult(self):
-        age_status = []
+        age_status = ["Adult" if (age > 18) else "NO adult" for age in self.__age]
         self.logger.log.info(f'Calc is adult {age_status}')
 
     def calc_categoric_sex_percent(self):
