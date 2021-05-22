@@ -54,5 +54,19 @@ class PersonManager:
         )
 
 
+    def run_option(self):
+        if not self.__is_valid_option():
+            print(f'Not valid menu option \'{self.__current_opt}\'')
+            return
+
+
+    def __is_valid_option(self):
+        is_correct_opt = self.__is_filled_data() and self.__current_opt < len(self.__menu_options)
+        is_minimum_required_options = self.__current_opt in self.MIN_REQ_MENU_OPTIONS
+        is_option_in_menu = is_correct_opt or is_minimum_required_options
+        if not is_option_in_menu: return False
+
+        return True
+
     def __is_filled_data(self):
         return self.__idx > 0
