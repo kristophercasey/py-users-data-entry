@@ -17,6 +17,8 @@ def orchestrator(config, logger):
         while True:
             personManager.print_options()
             personManager.request_option()
+            personManager.run_option()
+            print("---------------------")
 
     except Exception as err:
         logger.log_traceback(err)
