@@ -24,7 +24,8 @@ class HelperClass:
                 is_zero = ((int_value == 0) and allowed_zero)
                 is_valid = is_positive and (is_zero or (int_value != 0))
                 if not is_valid:
-                    print("Integer number > 0 is mandatory. Inserted value is", type(int_value), "'{}'".format(int_value))
+                    type_value = type(int_value)
+                    print(f'Integer number > 0 is mandatory. Inserted value is \'{int_value}\' {type_value}')
                     continue
                 break
             except ValueError:
@@ -54,10 +55,26 @@ class HelperClass:
                 is_zero = ((float_value == 0) and allowed_zero)
                 is_valid = is_positive and (is_zero or (float_value != 0))
                 if not is_valid:
-                    print("Float number > 0.0 is mandatory. Inserted value is", type(float_value), "'{}'".format(float_value))
+                    type_value = type(float_value)
+                    print(f'Float number > 0.0 is mandatory. Inserted value is \'{float_value}\' {type_value}')
                     continue
                 break
             except ValueError:
                 print("Value type float is mandatory.")
 
         return float_value
+
+
+    @staticmethod
+    def input_str(message = "", options = []):
+        opt = ""
+        while True:
+            opt = input(message)
+            if (len(options) > 0) and (opt not in options):
+                type_opt = type(opt)
+                print(f'Specific value is mandatory. Inserted value is \'{opt}\' {type_opt}')
+                continue
+            else:
+                break
+
+        return opt
