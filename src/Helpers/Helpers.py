@@ -1,4 +1,5 @@
-
+import json
+import os.path
 
 class HelperClass:
 
@@ -33,7 +34,6 @@ class HelperClass:
 
         return int_value
 
-
     @staticmethod
     def input_float(message, required_positive = False, allowed_zero = True):
         """
@@ -64,9 +64,17 @@ class HelperClass:
 
         return float_value
 
-
     @staticmethod
     def input_str(message = "", options = []):
+        """Request normal input string. Configurable with message and options to validate
+
+        Args:
+            message (str, optional): Input message. Defaults to "".
+            options (list, optional): List of options to validate. Defaults to [].
+
+        Returns:
+            str: selected option
+        """
         opt = ""
         while True:
             opt = input(message)
@@ -78,3 +86,60 @@ class HelperClass:
                 break
 
         return opt
+
+    @staticmethod
+    def save_data_to_file(DATA_DIR_PATH = "sample_data", file_name = "example", data = [], overwrite = False):
+        """Save data into json file
+
+        Args:
+            DATA_DIR_PATH (str): directory path. Defaults to "sample_data"
+            file_name (str): file name. Defaults to "example"
+            data (list of obj): contains data to save on file
+            overwrite (bool, optional): Force overwrite if already exist file. Defaults to False.
+        """
+        path = f'{DATA_DIR_PATH}/{file_name}.json'
+        is_empty_file = False
+
+        if not os.path.isfile(path):
+            is_empty_file = True
+            open(path, "a")
+            with open(path, "w") as write_file:
+                json.dump([], write_file)
+
+        if overwrite or is_empty_file:
+            with open(path, "w") as write_file:
+                json.dump(data, write_file, indent=2, default=str)
+        else:
+            print ("Data file already exist or is not empty, set overwrite = TRUE to overwrite contents")
+
+    @staticmethod
+    def get_data_from_file(DATA_DIR_PATH = "sample_data", file_name = "example"):
+        """Get data from json file
+
+        Args:
+            DATA_DIR_PATH (str): directory path. Defaults to "sample_data"
+            file_name (str): file name. Defaults to "example"
+
+        Returns:
+            list json obj: data from file
+        """
+        path = f'{DATA_DIR_PATH}/{file_name}.json'
+
+        if os.path.isfile(path):
+            with open(path) as json_file:
+                return json.load(json_file)
+        else:
+            print(f'File does not exit at "{path}"')
+
+    @staticmethod
+    def printt(data, beauty=True):
+        """Custom print beauty json data
+
+        Args:
+            data (list of items): data to print
+            beauty (bool, optional): Defines if beauty or normal print. Defaults to True.
+        """
+        if beauty:
+            print(json.dumps(data, indent=2, sort_keys=True))
+        else:
+            print(data)

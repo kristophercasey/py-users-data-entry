@@ -9,8 +9,6 @@ class PersonManager:
         "Calc document",
         "Calc is adult",
         "Calc sex percent",
-        "Calc weight percent",
-        "Calc age percent",
         "Get data",
     ]
     EXIT_OPT_POS = 0
@@ -18,25 +16,17 @@ class PersonManager:
 
     def __init__(self, config, logger):
         self.MIN_REQ_MENU_OPTIONS = [self.INSERT_DATA_OPT_POS, self.EXIT_OPT_POS]
-        # self.__name = []
-        # self.__age = []
-        # self.__dni = []
-        # self.__weight = []
-        # self.__height = []
-        # self.__address = []
-        # self.__sex = []
+        self.__name = []
+        self.__age = []
+        self.__age_status = []
+        self.__dni = []
+        self.__weight = []
+        self.__height = []
+        self.__address = []
+        self.__sex = []
         self.__imc = []
         self.__idx = 0
         self.__current_opt = None
-
-        self.__name = ['Sergio', 'Cris']
-        self.__age = [30, 29]
-        self.__dni = ["DNI 1", "DNI 2"]
-        self.__weight = [85.1, 70.0]
-        self.__height = [1.75, 1.7]
-        self.__address = ["adress 1", "adress 2"]
-        self.__sex = ['m', 'w']
-        self.__idx = 2
 
         self.config = config
         self.logger = logger
@@ -44,7 +34,7 @@ class PersonManager:
     def print_options(self):
         print("")
         for idx, opt in enumerate(self.__menu_options):
-            if self.__is_filled_data(): print(f'{idx}) ', opt)
+            if (self.__idx > 0): print(f'{idx}) ', opt)
             elif idx in self.MIN_REQ_MENU_OPTIONS: print(f'{idx}) ', opt)
 
     def request_option(self):
@@ -52,42 +42,46 @@ class PersonManager:
             message = "Insert option: ",
             required_positive = True
         )
-
+        self.__data = {
+            "name": self.__name,
+            "age": self.__age,
+            "age_s": self.__age_status,
+            "dni": self.__dni,
+            "weight": self.__weight,
+            "height": self.__height,
+            "address": self.__address,
+            "sex": self.__sex,
+            "imc": self.__imc,
+            "idx": self.__idx,
+        }
 
     def run_option(self):
         if not self.__is_valid_option():
             print(f'Not valid menu option \'{self.__current_opt}\'')
             return
 
-        if self.__current_opt == 0:
-            self.logger.log.info("Exit program")
-            exit()
-        elif self.__current_opt == 1:
-            self.insert_data()
-        elif self.__current_opt == 2:
-            self.calc_imc()
-        elif self.__current_opt == 3:
-            self.calc_document()
-        elif self.__current_opt == 4:
-            self.calc_is_adult()
-        elif self.__current_opt == 5:
-            self.calc_categoric_sex_percent()
-        elif self.__current_opt == 6:
-            self.calc_categoric_weight_percent()
-        elif self.__current_opt == 7:
-            self.calc_categoric_age_percent()
-        elif self.__current_opt == 8:
-            self.get_variables()
+        if self.__current_opt == 0: self.__exit()
+        elif self.__current_opt == 1: self.__insert_data()
+        elif self.__current_opt == 2: self.__calc_imc()
+        elif self.__current_opt == 3: self.__calc_document()
+        elif self.__current_opt == 4: self.__calc_is_adult()
+        elif self.__current_opt == 5: self.__calc_categoric_sex_percent()
+        elif self.__current_opt == 6: self.__calc_categoric_weight_percent()
+        elif self.__current_opt == 7: self.__calc_categoric_age_percent()
+        elif self.__current_opt == 8: self.__get_data()
 
     def __is_valid_option(self):
-        is_correct_opt = self.__is_filled_data() and self.__current_opt < len(self.__menu_options)
+        is_correct_opt = (self.__idx > 0) and self.__current_opt < len(self.__menu_options)
         is_minimum_required_options = self.__current_opt in self.MIN_REQ_MENU_OPTIONS
         is_option_in_menu = is_correct_opt or is_minimum_required_options
         if not is_option_in_menu: return False
-
         return True
 
-    def insert_data(self):
+    def __exit(self):
+        self.logger.log.info("Exit program")
+        exit()
+
+    def __insert_data(self):
         print("Insert person data")
         print(f'People to insert: {self.config.n_people} \n')
         self.__idx = 0
@@ -97,24 +91,15 @@ class PersonManager:
             self.__age.append(HelperClass.input_int(message = f'({user_num}) Insert age: ', required_positive = True, allowed_zero = False))
             self.__sex.append(HelperClass.input_str(message = f'({user_num}) Insert sex [man(m) | woman(w)]: ', options = ['m', 'w']))
             # self.__dni.append(HelperClass.input_str(f'({user_num}) Insert dni: '))
-            self.__weight.append(HelperClass.input_float(message = f'({user_num}) Insert weight: ', required_positive = True, allowed_zero = False))
-            self.__height.append(HelperClass.input_float(message = f'({user_num}) Insert height: ', required_positive = True, allowed_zero = False))
+            self.__weight.append(HelperClass.input_float(message = f'({user_num}) Insert weight (kg): ', required_positive = True, allowed_zero = False))
+            self.__height.append(HelperClass.input_float(message = f'({user_num}) Insert height: (m)', required_positive = True, allowed_zero = False))
             # self.__address.append(HelperClass.input_str(f'({user_num}) Insert address: '))
             self.__idx += 1
             print("")
 
         self.logger.log.info("Data saved correctly")
-        print(self.__name)
-        print(self.__age)
-        print(self.__dni)
-        print(self.__weight)
-        print(self.__height)
-        print(self.__address)
-        print(self.__sex)
 
-        # self.__insert_sex()
-
-    def calc_imc(self):
+    def __calc_imc(self):
         """
         IMC = weight(kg) / height(m)
         """
@@ -123,29 +108,20 @@ class PersonManager:
         for idx, imc in enumerate(self.__imc):
             print(self.__name[idx], "(imc): ", imc)
 
-    def calc_document(self):
+    def __calc_document(self):
         self.logger.log.info("Calc document")
 
-    def calc_is_adult(self):
-        age_status = ["Adult" if (age > 18) else "NO adult" for age in self.__age]
-        self.logger.log.info(f'Calc is adult {age_status}')
+    def __calc_is_adult(self):
+        self.__age_status = ["Adult" if (age > 18) else "NO adult" for age in self.__age]
+        self.logger.log.info(f'Calc is adult {self.__age_status}')
 
-    def calc_categoric_sex_percent(self):
+    def __calc_categoric_sex_percent(self):
         self.logger.log.info("Calc categoric sex percent")
         man_percentage = (sum([1 if sex == 'm' else 0 for sex in self.__sex]) / self.__idx) * 100
         woman_percentage = (sum([1 if sex == 'w' else 0 for sex in self.__sex]) / self.__idx) * 100
         print(f'Man percentage {man_percentage} %')
         print(f'Woman percentage {woman_percentage} %')
 
-    def calc_categoric_weight_percent(self):
-        self.logger.log.info("Calc categoric weight percent")
-
-    def calc_categoric_age_percent(self):
-        self.logger.log.info("Calc categoric age percent")
-
-    def get_variables(self):
-        self.logger.log.info("Exit program")
-        return self.__name, self.__sex
-
-    def __is_filled_data(self):
-        return self.__idx > 0
+    def __get_data(self):
+        self.logger.log.info("Getting data")
+        return self.__data
