@@ -4,12 +4,12 @@ import os.path
 class HelperClass:
 
     @staticmethod
-    def input_int(message, required_positive = False, allowed_zero = True):
+    def input_int(message = "", required_positive = False, allowed_zero = True):
         """
         Request input only integer type allowed. Configurable validate positive and zero values.
 
         Args:
-            message (str): Input message
+            message (str, optional): Input message. Defaults to "".
             required_positive (bool, optional): Force input to be positive number. Defaults to False.
             allowed_zero (bool, optional): Validate number to allow zero value. Defaults to True.
 
@@ -35,12 +35,12 @@ class HelperClass:
         return int_value
 
     @staticmethod
-    def input_float(message, required_positive = False, allowed_zero = True):
+    def input_float(message = "", required_positive = False, allowed_zero = True):
         """
         Request input only float type allowed. Configurable validate positive and zero values.
 
         Args (rules):
-            message (str): Input message
+            message (str, optional): Input message. Defaults to "".
             required_positive (bool, optional): Force input to be positive number. Defaults to False.
             allowed_zero (bool, optional): Validate number to allow zero value. Defaults to True.
 
@@ -92,9 +92,9 @@ class HelperClass:
         """Save data into json file
 
         Args:
-            DATA_DIR_PATH (str): directory path. Defaults to "sample_data"
-            file_name (str): file name. Defaults to "example"
-            data (list of obj): contains data to save on file
+            DATA_DIR_PATH (str, optional): directory path. Defaults to "sample_data".
+            file_name (str, optional): file name. Defaults to "example".
+            data (list of obj, optional): contains data to save on file. Defaults to empty [].
             overwrite (bool, optional): Force overwrite if already exist file. Defaults to False.
         """
         path = f'{DATA_DIR_PATH}/{file_name}.json'
@@ -117,8 +117,8 @@ class HelperClass:
         """Get data from json file
 
         Args:
-            DATA_DIR_PATH (str): directory path. Defaults to "sample_data"
-            file_name (str): file name. Defaults to "example"
+            DATA_DIR_PATH (str, optional): directory path. Defaults to "sample_data".
+            file_name (str, optional): file name. Defaults to "example".
 
         Returns:
             list json obj: data from file
