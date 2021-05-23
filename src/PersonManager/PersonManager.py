@@ -1,3 +1,4 @@
+import json
 from multiprocessing.sharedctypes import Value
 from src.Helpers.Helpers import HelperClass
 
@@ -24,8 +25,7 @@ class PersonManager:
         "Get data",
     ]
     __current_opt = None
-    man_percentage = None
-    woman_percentage = None
+    __data = {}
 
     def __init__(self, config, logger):
         self.MIN_REQ_MENU_OPTIONS = [self.__INSERT_DATA_OPT_POS, self.__EXIT_OPT_POS]
@@ -74,10 +74,10 @@ class PersonManager:
         elif self.__current_opt == self.__INSERT_DATA_OPT_POS: self.__insert_data()
         elif self.__current_opt == 2:
             self.__calc_bmi()
-            self.__print_values_for(self.__bmi, 'BMI')
+            self.__print_values_for(data = self.__bmi, tag = 'BMI', units = "kg/m")
         elif self.__current_opt == 3:
             self.__calc_is_adult()
-            self.__print_values_for(self.__age_status, 'Age status')
+            self.__print_values_for(data = self.__age_status, tag = 'Age status')
         elif self.__current_opt == 4:
             self.__calc_categoric_sex_percent()
             self.__print_categoric_sex_percent()
@@ -87,7 +87,7 @@ class PersonManager:
     def __is_valid_option(self):
         is_minimum_required_option = self.__is_empty_data and self.__current_opt in self.MIN_REQ_MENU_OPTIONS
         is_option_in_menu = self.__current_opt < len(self.__menu_options)
-        is_correct_opt = is_minimum_required_option and is_option_in_menu
+        is_correct_opt = is_minimum_required_option or is_option_in_menu
         if not is_correct_opt: return False
         return True
 
@@ -105,17 +105,22 @@ class PersonManager:
             print("")
 
         self.logger.log.info("Data saved correctly")
+        self.__save_data()
+
+    def __save_data(self):
         self.__data = {
-            "name":     self.__name,
-            "age":      self.__age,
-            "age_s":    self.__age_status,
-            "dni":      self.__dni,
-            "weight":   self.__weight,
-            "height":   self.__height,
-            "address":  self.__address,
-            "sex":      self.__sex,
-            "bmi":      self.__bmi,
-            "idx":      self.__idx,
+            "name": self.__name,
+            "age":  self.__age,
+            "age_status": self.__age_status,
+            "dni":     self.__dni,
+            "weight":  self.__weight,
+            "height":  self.__height,
+            "address": self.__address,
+            "sex":     self.__sex,
+            "bmi":     self.__bmi,
+            "idx":     self.__idx,
+            "man_percentage": 0,
+            "woman_percentage": 0
         }
 
     def __insert_row(self):
@@ -163,23 +168,27 @@ class PersonManager:
         """
         self.logger.log.info("Calc people BMI")
         self.__bmi = [ (self.__weight[idx] / self.__height[idx]) for idx in range(0, len(self.__weight)) ]
+        self.__data['bmi'] = self.__bmi
 
-    def __print_values_for(self, data, tag):
+    def __print_values_for(self, data, tag, units = ""):
         for idx, val in enumerate(data):
-            print(f'{self.__name[idx]} ({tag}): {val}')
+            print(f'{self.__name[idx]} ({tag}): {val} {units}')
 
     def __calc_is_adult(self):
         self.logger.log.info("Calc if people is adult")
         self.__age_status = ["Adult" if (age > 18) else "NO adult" for age in self.__age]
+        self.__data['age_status'] = self.__age_status
 
     def __calc_categoric_sex_percent(self):
         self.logger.log.info("Calc people categoric sex percent")
-        self.man_percentage = (sum([1 if sex == 'm' else 0 for sex in self.__sex]) / self.__idx) * 100
-        self.woman_percentage = (sum([1 if sex == 'w' else 0 for sex in self.__sex]) / self.__idx) * 100
+        self.__data['man_percentage'] = (sum([1 if sex == 'm' else 0 for sex in self.__sex]) / self.__idx) * 100
+        self.__data['woman_percentage'] = (sum([1 if sex == 'w' else 0 for sex in self.__sex]) / self.__idx) * 100
 
     def __print_categoric_sex_percent(self):
-        print(f'Man percentage {self.man_percentage} %')
-        print(f'Woman percentage {self.woman_percentage} %')
+        man_perc = self.__data['man_percentage']
+        wom_perc = self.__data['woman_percentage']
+        print(f'Man percentage {man_perc} %')
+        print(f'Woman percentage {wom_perc} %')
 
     def __get_data(self):
         self.logger.log.info("Getting data")
