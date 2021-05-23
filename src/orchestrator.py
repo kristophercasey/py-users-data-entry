@@ -14,10 +14,11 @@ def orchestrator(config, logger):
 
         personManager = PersonManager(config = config, logger = logger)
 
+        result = None
         while True:
-            personManager.print_options()
-            personManager.request_option()
-            personManager.run_option()
+            result = personManager.start()
+            if not result == None:
+                print(result)
             print("---------------------")
 
     except Exception as err:
