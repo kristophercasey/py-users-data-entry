@@ -19,8 +19,6 @@ def main(args):
     # Init the logger and first message
     logger.init_logger()
 
-    # First default log
-    logger.first_default_log()
     # Print arguments using log
     logger.log.info(f'Arguments: {args}')
 

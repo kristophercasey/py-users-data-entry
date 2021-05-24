@@ -1,5 +1,4 @@
-import json
-import os.path
+
 
 class HelperClass:
 
@@ -25,8 +24,8 @@ class HelperClass:
                 is_zero = ((int_value == 0) and allowed_zero)
                 is_valid = is_positive and (is_zero or (int_value != 0))
                 if not is_valid:
-                    type_value = type(int_value)
-                    print(f'Integer number > 0 is mandatory. Inserted value is \'{int_value}\' {type_value}')
+                    value_type = type(int_value)
+                    print(f'Integer number > 0 is mandatory. Inserted value is \'{int_value}\' {value_type}')
                     continue
                 break
             except ValueError:
@@ -55,8 +54,8 @@ class HelperClass:
                 is_zero = ((float_value == 0) and allowed_zero)
                 is_valid = is_positive and (is_zero or (float_value != 0))
                 if not is_valid:
-                    type_value = type(float_value)
-                    print(f'Float number > 0.0 is mandatory. Inserted value is \'{float_value}\' {type_value}')
+                    value_type = type(float_value)
+                    print(f'Float number > 0.0 is mandatory. Inserted value is \'{float_value}\' {value_type}')
                     continue
                 break
             except ValueError:
@@ -75,71 +74,14 @@ class HelperClass:
         Returns:
             str: selected option
         """
-        opt = ""
+        current_opt = ""
         while True:
-            opt = input(message)
-            if (len(options) > 0) and (opt not in options):
-                type_opt = type(opt)
-                print(f'Specific value is mandatory. Inserted value is \'{opt}\' {type_opt}')
+            current_opt = input(message)
+            if (len(options) > 0) and (not current_opt in options):
+                value_type = type(current_opt)
+                print(f'Specific value is mandatory. Inserted value is \'{current_opt}\' {value_type}')
                 continue
             else:
                 break
 
-        return opt
-
-    @staticmethod
-    def save_data_to_file(DATA_DIR_PATH = "sample_data", file_name = "example", data = [], overwrite = False):
-        """Save data into json file
-
-        Args:
-            DATA_DIR_PATH (str, optional): directory path. Defaults to "sample_data".
-            file_name (str, optional): file name. Defaults to "example".
-            data (list of obj, optional): contains data to save on file. Defaults to empty [].
-            overwrite (bool, optional): Force overwrite if already exist file. Defaults to False.
-        """
-        path = f'{DATA_DIR_PATH}/{file_name}.json'
-        is_empty_file = False
-
-        if not os.path.isfile(path):
-            is_empty_file = True
-            open(path, "a")
-            with open(path, "w") as write_file:
-                json.dump([], write_file)
-
-        if overwrite or is_empty_file:
-            with open(path, "w") as write_file:
-                json.dump(data, write_file, indent=2, default=str)
-        else:
-            print ("Data file already exist or is not empty, set overwrite = TRUE to overwrite contents")
-
-    @staticmethod
-    def get_data_from_file(DATA_DIR_PATH = "sample_data", file_name = "example"):
-        """Get data from json file
-
-        Args:
-            DATA_DIR_PATH (str, optional): directory path. Defaults to "sample_data".
-            file_name (str, optional): file name. Defaults to "example".
-
-        Returns:
-            list json obj: data from file
-        """
-        path = f'{DATA_DIR_PATH}/{file_name}.json'
-
-        if os.path.isfile(path):
-            with open(path) as json_file:
-                return json.load(json_file)
-        else:
-            print(f'File does not exit at "{path}"')
-
-    @staticmethod
-    def printt(data, beauty=True):
-        """Custom print beauty json data
-
-        Args:
-            data (list of items): data to print
-            beauty (bool, optional): Defines if beauty or normal print. Defaults to True.
-        """
-        if beauty:
-            print(json.dumps(data, indent=2, sort_keys=True))
-        else:
-            print(data)
+        return current_opt
